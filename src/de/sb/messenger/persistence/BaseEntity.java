@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.validation.constraints.Min;
 
-public class BaseEntity implements Comparable<BaseEntity>{
+public class BaseEntity implements Comparable{
 	@Min(value = 0)
-	private long identiy;
+	private long identity;
 	@Min(value = 0)
 	private int version;
 	@Min(value = 0)
@@ -14,23 +14,23 @@ public class BaseEntity implements Comparable<BaseEntity>{
 	private List<Message> messagesCaused;
 	
 	public BaseEntity(long identity, int version, long creationTimestamp) {
-		this.identiy = identity;
+		this.identity = identity;
 		this.version = version;
 		this.creationTimestamp = creationTimestamp;
 	}
 	
 	public BaseEntity() {
-		this.identiy = 0;
+		this.identity = 0;
 		this.version = 0;
 		this.creationTimestamp = 0;
 	}
 	
-	public double getIdentiy() {
-		return identiy;
+	public double getIdentity() {
+		return identity;
 	}
 	
-	public void setIdentiy(long identiy) {
-		this.identiy = identiy;
+	public void setIdentity(long identiy) {
+		this.identity = identiy;
 	}
 	
 	public int getVersion() {
