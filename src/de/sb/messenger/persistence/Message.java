@@ -9,6 +9,12 @@ public class Message extends BaseEntity {
 	@Size(min = 1, max = 4093)
 	private String body;
 	
+	public Message(Person author, BaseEntity subject, String body) {
+		this.author = author;
+		this.subject = subject;
+		this.body = body;
+	}
+	
 	public Person getAuthor() {                     
 		return author;                              
     }

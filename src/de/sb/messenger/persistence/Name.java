@@ -1,12 +1,18 @@
 package de.sb.messenger.persistence;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class Name {
-	@Size(min = 1, max = 31)
+	@NotNull @Size(min = 1, max = 31)
 	private String given;
-	@Size(min = 1, max = 31)
+	@NotNull @Size(min = 1, max = 31)
 	private String family;
+	
+	public Name(String given, String family) {
+		this.given = given;
+		this.family = family;
+	}
 	
 	public String getGiven() {
 		return given;

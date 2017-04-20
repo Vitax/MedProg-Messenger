@@ -7,11 +7,16 @@ import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class Person {
-	
-	private Group group;
+public class Person extends BaseEntity {
+
+	private Group group; 
+	@Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+	        +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+	        +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+	message="{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
 	private String email;
 	@NotNull @Size(min = 32, max = 32)
@@ -26,6 +31,13 @@ public class Person {
 	private List<Person> peopleObserving;
 	private List<Person> peopleObserved;
 	
+	public Person(Name name, Address address, Group group, String email) {
+		this.name = name;
+		this.address = address;
+		this.group = group;
+		this.email = email;
+	}
+
 	public enum Group {
 		ADMIN, USER
 	}
@@ -101,9 +113,9 @@ public class Person {
 	public void setPeopleObserved(List<Person> peopleObserved) {
 		this.peopleObserved = peopleObserved;
 	}
-	
+
 	@Size(min = 32, max = 32)
 	public byte[] passwordHash(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		return MessageDigest.getInstance("MD5").digest(password.getBytes("UTF-8"));
+		return MessageDigest.getInstance("SHA-256").digest(password.getBytes("UTF-8"));
 	}
 }
