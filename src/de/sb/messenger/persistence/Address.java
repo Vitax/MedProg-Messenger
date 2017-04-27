@@ -12,11 +12,18 @@ public class Address {
 	private String postcode;
 	@NotNull @Size(min = 1, max = 63) @Pattern(regexp="^([^0-9]{2,})?$")
 	private String city;
+	private Person person;
 	
-	public Address(String street, String postcode, String city) {
+	public Address(String street, String postcode, String city, Person person) {
 		this.street = street;
 		this.postcode = postcode;
 		this.city = city;
+		this.person = person;
+	}
+	
+	public Person getSubjectReference()
+	{
+		return person;
 	}
 	
 	public String getStreet() {
