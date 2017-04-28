@@ -27,7 +27,7 @@ public class Person extends BaseEntity {
 	private Address address;
 	@Valid
 	private Document avatar;
-	private List<Message> messagesList;
+	private List<Message> messagesAuthored;
 	private List<Person> peopleObserving;
 	private List<Person> peopleObserved;
 	
@@ -42,6 +42,7 @@ public class Person extends BaseEntity {
 		ADMIN, USER
 	}
 
+	
 	public String getEmail() {
 		return email;
 	}
@@ -90,12 +91,12 @@ public class Person extends BaseEntity {
 		this.avatar = avatar;
 	}
 
-	public List<Message> getMessagesList() {
-		return messagesList;
+	public List<Message> getMessagesAuthored() {
+		return messagesAuthored;
 	}
 
-	public void setMessagesList(List<Message> messagesList) {
-		this.messagesList = messagesList;
+	public void setMessagesAuthored(List<Message> messagesAuthored) {
+		this.messagesAuthored = messagesAuthored;
 	}
 
 	public List<Person> getPeopleObserving() {
