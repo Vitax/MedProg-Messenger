@@ -8,24 +8,24 @@ public class Name {
 	private String given;
 	@NotNull @Size(min = 1, max = 31)
 	private String family;
-	
-	public Name(String given, String family) {
-		this.given = given;
-		this.family = family;
+
+	public Name() {
+		this.given = null;
+		this.family = null;
 	}
-	
+
 	public String getGiven() {
 		return given;
 	}
-	
+
 	public void setGiven(String given) {
 		this.given = given;
 	}
-	
+
 	public String getFamily() {
 		return family;
 	}
-	
+
 	public void setFamily(String family) {
 		this.family = family;
 	}
