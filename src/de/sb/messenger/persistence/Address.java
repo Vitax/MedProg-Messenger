@@ -16,7 +16,7 @@ public class Address {
 	public Address() {
 		this.street = null;
 		this.postcode = null;
-		this.city = "";
+		this.city = null;
 	}
 
 	public String getStreet() {
