@@ -31,6 +31,9 @@ public class Person extends BaseEntity {
 	public Person(Group group, String email) {
 		this.group = group;
 		this.email = email;
+		this.name = null;
+		this.address = null;
+		this.avatar = null;
 	}
 
 	protected Person() {
