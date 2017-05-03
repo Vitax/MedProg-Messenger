@@ -3,7 +3,7 @@ package de.sb.messenger.persistence;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -12,11 +12,8 @@ import javax.validation.constraints.Size;
 
 public class Person extends BaseEntity {
 
-	private Group group; 
-	@Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
-	        +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
-	        +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-	message="{invalid.email}")
+	private Group group;
+	@Pattern(regexp = "(.+)\\@(.+)", message = "{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
 	private String email;
 	@NotNull @Size(min = 32, max = 32)
@@ -27,18 +24,27 @@ public class Person extends BaseEntity {
 	private Address address;
 	@Valid
 	private Document avatar;
-	private List<Message> messagesAuthored;
-	private List<Person> peopleObserving;
-	private List<Person> peopleObserved;
-	
-	public Person(Name name, Address address, Group group, String email) {
-		this.name = name;
-		this.address = address;
+	private Set<Message> messages;
+	private Set<Person> peopleObserving;
+	private Set<Person> peopleObserved;
+
+	public Person(Group group, String email) {
 		this.group = group;
 		this.email = email;
+		this.name = null;
+		this.address = null;
+		this.avatar = null;
 	}
 
-	public enum Group {
+	protected Person() {
+		this.name = null;
+		this.address = null;
+		this.group = null;
+		this.email = null;
+		this.avatar = null;
+	}
+
+	static public enum Group {
 		ADMIN, USER
 	}
 
@@ -71,16 +77,8 @@ public class Person extends BaseEntity {
 		return name;
 	}
 
-	public void setName(Name name) {
-		this.name = name;
-	}
-
 	public Address getAddress() {
 		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
 	}
 
 	public Document getAvatar() {
@@ -91,32 +89,24 @@ public class Person extends BaseEntity {
 		this.avatar = avatar;
 	}
 
-	public List<Message> getMessagesAuthored() {
-		return messagesAuthored;
+	public Set<Message> getMessagesList() {
+		return messages;
 	}
 
-	public void setMessagesAuthored(List<Message> messagesAuthored) {
-		this.messagesAuthored = messagesAuthored;
+	public void setMessagesList(Set<Message> messagesList) {
+		this.messages = messagesList;
 	}
 
-	public List<Person> getPeopleObserving() {
+	public Set<Person> getPeopleObserving() {
 		return peopleObserving;
 	}
 
-	public void setPeopleObserving(List<Person> peopleObserving) {
-		this.peopleObserving = peopleObserving;
-	}
-
-	public List<Person> getPeopleObserved() {
+	public Set<Person> getPeopleObserved() {
 		return peopleObserved;
 	}
 
-	public void setPeopleObserved(List<Person> peopleObserved) {
-		this.peopleObserved = peopleObserved;
-	}
-
 	@Size(min = 32, max = 32)
-	public byte[] passwordHash(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	static public byte[] passwordHash(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		return MessageDigest.getInstance("SHA-256").digest(password.getBytes("UTF-8"));
 	}
 }
