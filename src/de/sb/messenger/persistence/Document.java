@@ -23,6 +23,12 @@ public class Document {
 		this.content = content;
 	}
 
+	protected Document() {
+		this.contentHash = null;
+		this.contentType = null;
+		this.content = null;
+	}
+	
 	public byte[] getContentHash() {
 		return contentHash;
 	}

@@ -15,6 +15,12 @@ public class Message extends BaseEntity {
 		this.body = body;
 	}
 
+	protected Message() {
+		this.author = null;
+		this.subject = null;
+		this.body = null;
+	}
+	
 	public Person getAuthor() {
 		return author;
 	}

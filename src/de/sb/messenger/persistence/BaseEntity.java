@@ -1,6 +1,7 @@
 package de.sb.messenger.persistence;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.Min;
 
@@ -10,7 +11,7 @@ public class BaseEntity implements Comparable<BaseEntity> {
 	@Min(value = 1)
 	private int version;
 	private long creationTimestamp;
-	private List<Message> messagesCaused;
+	private Set <Message> messagesCaused;
 
 	public BaseEntity() {
 		this.identiy = 0;
@@ -35,11 +36,11 @@ public class BaseEntity implements Comparable<BaseEntity> {
 	}
 
 
-	public List<Message> getMessagesCaused() {
+	public Set <Message> getMessagesCaused() {
 		return messagesCaused;
 	}
 
-	public void setMessagesCaused(List<Message> messagesCaused) {
+	public void setMessagesCaused(Set<Message> messagesCaused) {
 		this.messagesCaused = messagesCaused;
 	}
 
