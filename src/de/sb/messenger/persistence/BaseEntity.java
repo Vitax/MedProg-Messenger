@@ -19,7 +19,7 @@ public class BaseEntity implements Comparable<BaseEntity> {
 		this.creationTimestamp = System.currentTimeMillis();
 	}
 
-	public double getIdentiy() {
+	public long getIdentiy() {
 		return identiy;
 	}
 
