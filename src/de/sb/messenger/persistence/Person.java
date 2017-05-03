@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 public class Person extends BaseEntity {
 
 	private Group group;
-	@Pattern(regexp = "([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])", message = "{invalid.email}")
+	@Pattern(regexp = "(.+)\\@(.+)", message = "{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
 	private String email;
 	@NotNull @Size(min = 32, max = 32)
@@ -48,6 +48,7 @@ public class Person extends BaseEntity {
 		ADMIN, USER
 	}
 
+	
 	public String getEmail() {
 		return email;
 	}
