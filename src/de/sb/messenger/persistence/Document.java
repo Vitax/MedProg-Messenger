@@ -7,26 +7,25 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.htw.test.model.Gruppe;
 
 @Entity
 @Table(name = "Document")
+@DiscriminatorValue(value = "Document")
+@PrimaryKeyJoinColumn(name="identity")
 public class Document {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "DocumentId")
-	private long id;
-    
+
 	@Column(name = "contentHash")
 	@NotNull @Size(min = 32, max = 32)
 	private byte[] contentHash;
@@ -39,7 +38,7 @@ public class Document {
 	@NotNull @Size(min = 1, max = 16777215)
 	private byte[] content;
 	
-	@OneToMany(mappedBy = "Person" , cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "Document" , cascade = CascadeType.REMOVE)
 	private Person avatar;
 
 	public Document(String contentType, byte[] content) throws NoSuchAlgorithmException, SQLException {

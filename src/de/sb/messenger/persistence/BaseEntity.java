@@ -3,15 +3,23 @@ package de.sb.messenger.persistence;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "BaseEntity")
+@Inheritance(strategy=JOINED)
+@DiscriminatorColumn(name = "BaseEntity_Type", discriminatorType=STRING, length=20)
 public class BaseEntity implements Comparable<BaseEntity> {
 
 	@Id
@@ -27,7 +35,7 @@ public class BaseEntity implements Comparable<BaseEntity> {
 	@Column(name = "creationTimestamp")
 	private long creationTimestamp;
 	
-	
+	@OneToMany(mappedBy = "BaseEntity" , cascade = CascadeType.REMOVE)
 	private Set <Message> messagesCaused;
 
 	public BaseEntity() {

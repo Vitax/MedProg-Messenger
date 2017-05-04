@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -25,12 +27,11 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "Person")
+@DiscriminatorValue(value = "Person")
+@PrimaryKeyJoinColumn(name="identity")
 public class Person extends BaseEntity {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "PersonId")
-	private long id;
+
 
 	@Column(name = "group")
 	@Enumerated
@@ -56,17 +57,17 @@ public class Person extends BaseEntity {
 
 	@Valid
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="DocumentId")
+	@JoinColumn(name="identity")
 	private Document avatar;
 	
-	@OneToMany(mappedBy = "Message" , cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "Person" , cascade = CascadeType.REMOVE)
 	private Set<Message> messages;
 	
-	@ManyToMany(mappedBy = "Person" , cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "Person" , cascade = CascadeType.REMOVE)
 	private Set<Person> peopleObserving;
 	
 	@ManyToMany
-	@JoinColumn(name="PersonId")
+	@JoinColumn(name="identity")
 	private Set<Person> peopleObserved;
 
 	public Person(Group group, String email) {
