@@ -29,14 +29,11 @@ import javax.validation.constraints.Size;
 @PrimaryKeyJoinColumn(name="identity")
 public class Person extends BaseEntity {
 
-
-
 	@Column(name = "group")
 	@Enumerated
 	private Group group;
-	
 	@Column(name = "email")
-	@Pattern(regexp = "([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])", message = "{invalid.email}")
+	@Pattern(regexp = "(.+)\\@(.+)", message = "{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
 	private String email;
 	
@@ -52,16 +49,15 @@ public class Person extends BaseEntity {
 	@Valid
 	private Address address;
 	
-
 	@Valid
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="identity")
 	private Document avatar;
 	
-	@OneToMany(mappedBy = "Person" , cascade = CascadeType.REMOVE)
+	@OneToMany
 	private Set<Message> messages;
 	
-	@ManyToMany(mappedBy = "Person" , cascade = CascadeType.REMOVE)
+	@ManyToMany(mappedBy = "peopleObserved") //cascade = CascadeType.REMOVE
 	private Set<Person> peopleObserving;
 	
 	@ManyToMany
@@ -88,6 +84,7 @@ public class Person extends BaseEntity {
 		ADMIN, USER
 	}
 
+	
 	public String getEmail() {
 		return email;
 	}
