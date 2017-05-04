@@ -1,11 +1,30 @@
 package de.sb.messenger.persistence;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+@Entity
+@Table(name = "Message")
+@DiscriminatorValue(value = "Message")
+@PrimaryKeyJoinColumn(name="identity")
 public class Message extends BaseEntity {
 
+
+	@Column(name = "author")
 	private Person author;
+	
+	@ManyToOne
+	@JoinColumn(name="identity")
+	//@Column(name = "subject")
 	private BaseEntity subject;
+	
+	@Column(name = "body")
 	@Size(min = 1, max = 4093)
 	private String body;
 

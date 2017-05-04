@@ -5,27 +5,63 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+@Entity
+@Table(name = "Person")
+@DiscriminatorValue(value = "Person")
+@PrimaryKeyJoinColumn(name="identity")
 public class Person extends BaseEntity {
 
+	@Column(name = "group")
+	@Enumerated
 	private Group group;
+	@Column(name = "email")
 	@Pattern(regexp = "(.+)\\@(.+)", message = "{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
 	private String email;
+	
+	@Column(name = "passwordHash")
 	@NotNull @Size(min = 32, max = 32)
 	private byte[] passwordHash;
+
+	@Embedded 
 	@Valid
 	private Name name;
+
+	@Embedded 
 	@Valid
 	private Address address;
+	
 	@Valid
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="identity")
 	private Document avatar;
+	
+	@OneToMany
 	private Set<Message> messages;
+	
+	@ManyToMany(mappedBy = "peopleObserved") //cascade = CascadeType.REMOVE
 	private Set<Person> peopleObserving;
+	
+	@ManyToMany
+	@JoinColumn(name="identity")
 	private Set<Person> peopleObserved;
 
 	public Person(Group group, String email) {
