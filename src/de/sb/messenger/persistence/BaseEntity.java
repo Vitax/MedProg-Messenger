@@ -1,64 +1,76 @@
 package de.sb.messenger.persistence;
 
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
-public class BaseEntity implements Comparable<BaseEntity>{
+@Entity
+@Table(name = "BaseEntity")
+@Inheritance(strategy=JOINED)
+@DiscriminatorColumn(name = "BaseEntity_Type", discriminatorType=STRING, length=20)
+public class BaseEntity implements Comparable<BaseEntity> {
+
+	@Id
+	@GeneratedValue
+	@Column(name = "identity")
 	@Min(value = 0)
 	private long identiy;
-	@Min(value = 0)
+	
+	@Column(name = "version")
+	@Min(value = 1)
 	private int version;
-	@Min(value = 0)
+	
+	@Column(name = "creationTimestamp")
 	private long creationTimestamp;
-	private List<Message> messagesCaused;
 	
-	public BaseEntity(long identity, int version, long creationTimestamp) {
-		this.identiy = identity;
-		this.version = version;
-		this.creationTimestamp = creationTimestamp;
-	}
-	
+	@OneToMany(mappedBy = "BaseEntity" , cascade = CascadeType.REMOVE)
+	private Set <Message> messagesCaused;
+
 	public BaseEntity() {
 		this.identiy = 0;
-		this.version = 0;
-		this.creationTimestamp = 0;
+		this.version = 1;
+		this.creationTimestamp = System.currentTimeMillis();
 	}
-	
-	public double getIdentiy() {
+
+	public long getIdentiy() {
 		return identiy;
 	}
-	
-	public void setIdentiy(long identiy) {
-		this.identiy = identiy;
-	}
-	
+
 	public int getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(int version) {
 		this.version = version;
 	}
-	
+
 	public double getCreationTimestamp() {
 		return creationTimestamp;
 	}
-	
-	public void setCreationTimestamp(long creationTimestamp) {
-		this.creationTimestamp = creationTimestamp;
-	}
-	
-	public List<Message> getMessagesCaused() {
+
+
+	public Set <Message> getMessagesCaused() {
 		return messagesCaused;
 	}
-	
-	public void setMessagesCaused(List<Message> messagesCaused) {
+
+	public void setMessagesCaused(Set<Message> messagesCaused) {
 		this.messagesCaused = messagesCaused;
 	}
 
 	@Override
 	public int compareTo(final BaseEntity obj) {
-		return Integer.compare(this.version, obj.version);
+		return Long.compare(this.identiy, obj.identiy);
 	}
 }
