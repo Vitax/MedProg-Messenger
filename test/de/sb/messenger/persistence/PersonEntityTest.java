@@ -79,7 +79,7 @@ public class PersonEntityTest extends EntityTest {
 		entityManager.getTransaction().commit();
 		this.getWasteBasket().add(person.getIdentiy());
 		entityManager.getTransaction().begin();
-		// person = entityManager(Person.class, person.getIdentiy());
+		person = entityManager.find(Person.class, person.getIdentiy());
 		assertEquals(person.getName().getGiven(), "John");
 		assertEquals(person.getName().getFamily(), "Smith");
 		assertEquals(person.getAddress().getCity(), "Berlin");
@@ -87,7 +87,7 @@ public class PersonEntityTest extends EntityTest {
 		entityManager.remove(person);
 		entityManager.getTransaction().commit();
 		// check if it's deleted , find for getter , Reference for setter
-		// entityManager.find(Perosn.class, ID???)
+		entityManager.find(Person.class, person.getIdentiy());
 		assertNull(person);
 
 	}
