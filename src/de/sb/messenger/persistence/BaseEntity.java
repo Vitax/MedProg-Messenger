@@ -1,6 +1,5 @@
 package de.sb.messenger.persistence;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,8 +17,8 @@ import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "BaseEntity")
-@Inheritance(strategy=JOINED)
-@DiscriminatorColumn(name = "BaseEntity_Type", discriminatorType=STRING, length=20)
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name = "BaseEntity_Type", discriminatorType=DiscriminatorType.STRING, length=20)
 public class BaseEntity implements Comparable<BaseEntity> {
 
 	@Id

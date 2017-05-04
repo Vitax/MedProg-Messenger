@@ -57,11 +57,11 @@ public class Person extends BaseEntity {
 	@OneToMany
 	private Set<Message> messages;
 	
-	@ManyToMany(mappedBy = "peopleObserved") //cascade = CascadeType.REMOVE
+	@ManyToMany(mappedBy = "peopleObserved_REL") //cascade = CascadeType.REMOVE
 	private Set<Person> peopleObserving;
 	
 	@ManyToMany
-	@JoinColumn(name="identity")
+	@JoinColumn(name="peopleObserved_REL")
 	private Set<Person> peopleObserved;
 
 	public Person(Group group, String email) {
