@@ -76,7 +76,7 @@ public class MessageEntityTest extends EntityTest {
 		this.getWasteBasket().add(person.getIdentiy());
 		entityManager.getTransaction().begin();
 
-		//message = entityManager(Message.class, message.getIdentiy());
+		message = entityManager.find(Message.class, message.getIdentiy());
 		assertEquals(message.getAuthor(), person);
 		assertEquals(message.getBody(), "Hi there!");
 		assertEquals(message.getIdentiy(), baseEntity);
@@ -85,7 +85,7 @@ public class MessageEntityTest extends EntityTest {
 		entityManager.remove(message);
 		entityManager.getTransaction().commit();
 		// check if it's deleted , find for getter , Reference for setter
-		// entityManager.find(Perosn.class, ID???)
+		entityManager.find(Message.class, message.getIdentiy());
 		assertNull(message);
 
 	}
