@@ -29,8 +29,6 @@ import javax.validation.constraints.Size;
 @PrimaryKeyJoinColumn(name="identity")
 public class Person extends BaseEntity {
 
-
-
 	@Column(name = "group")
 	@Enumerated
 	private Group group;
@@ -52,16 +50,15 @@ public class Person extends BaseEntity {
 	@Valid
 	private Address address;
 	
-
 	@Valid
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="identity")
 	private Document avatar;
 	
-	@OneToMany(mappedBy = "Person" , cascade = CascadeType.REMOVE)
+	@OneToMany
 	private Set<Message> messages;
 	
-	@ManyToMany(mappedBy = "Person" , cascade = CascadeType.REMOVE)
+	@ManyToMany(mappedBy = "peopleObserved") //cascade = CascadeType.REMOVE
 	private Set<Person> peopleObserving;
 	
 	@ManyToMany
