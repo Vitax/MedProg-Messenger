@@ -32,9 +32,8 @@ public class Person extends BaseEntity {
 	@Column(name = "group")
 	@Enumerated
 	private Group group;
-	
 	@Column(name = "email")
-	@Pattern(regexp = "([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])", message = "{invalid.email}")
+	@Pattern(regexp = "(.+)\\@(.+)", message = "{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
 	private String email;
 	
@@ -85,6 +84,7 @@ public class Person extends BaseEntity {
 		ADMIN, USER
 	}
 
+	
 	public String getEmail() {
 		return email;
 	}

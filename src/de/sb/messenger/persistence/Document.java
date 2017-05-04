@@ -21,8 +21,6 @@ import javax.validation.constraints.Size;
 @DiscriminatorValue(value = "Document")
 @PrimaryKeyJoinColumn(name="identity")
 public class Document {
-
-
 	@Column(name = "contentHash")
 	@NotNull @Size(min = 32, max = 32)
 	private byte[] contentHash;
