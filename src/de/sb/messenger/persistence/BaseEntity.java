@@ -1,16 +1,37 @@
 package de.sb.messenger.persistence;
 
-import java.util.List;
-import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
+@Entity
+@Table(name = "BaseEntity")
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name = "BaseEntity_Type", discriminatorType=DiscriminatorType.STRING, length=20)
 public class BaseEntity implements Comparable<BaseEntity> {
+
+	@Id
+	@GeneratedValue
+	@Column(name = "identity")
 	@Min(value = 0)
 	private long identiy;
+	
+	@Column(name = "version")
 	@Min(value = 1)
 	private int version;
+	
+	@Column(name = "creationTimestamp")
 	private long creationTimestamp;
+	
+	@OneToMany(mappedBy = "subject")
 	private Set <Message> messagesCaused;
 
 	public BaseEntity() {
