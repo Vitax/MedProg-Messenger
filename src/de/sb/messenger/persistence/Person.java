@@ -60,11 +60,15 @@ public class Person extends BaseEntity {
 	@OneToMany(mappedBy = "author")
 	private Set<Message> messages;
 	
-	@ManyToMany(mappedBy = "peopleObserved_REL") //cascade = CascadeType.REMOVE
+	@ManyToMany(mappedBy = "peopleObserved") //cascade = CascadeType.REMOVE
 	private Set<Person> peopleObserving;
 	
 	@ManyToMany
-	@JoinColumn(name="peopleObserved_REL")
+	@JoinTable(
+		name = “peopleRelations“,
+		joinColumns = @JoinColumn(name=“peopleObserved_ID“, referencedColumnName="identity"),
+		inverseJoinColumns = @JoinColumn(name=“peopleObserving_ID“, referencedColumnName="identity")
+	)
 	private Set<Person> peopleObserved;
 
 	public Person(Group group, String email) {
