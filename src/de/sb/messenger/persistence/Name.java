@@ -7,8 +7,10 @@ import javax.validation.constraints.Size;
 
 @Embeddable 
 public class Name {
+	
 	@NotNull @Size(min = 1, max = 31)
 	private String given;
+	
 	@NotNull @Size(min = 1, max = 31)
 	private String family;
 
