@@ -32,6 +32,7 @@ public class Person extends BaseEntity {
 	@Column(name = "group")
 	@Enumerated
 	private Group group;
+	
 	@Column(name = "email")
 	@Pattern(regexp = "(.+)\\@(.+)", message = "{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
@@ -43,10 +44,12 @@ public class Person extends BaseEntity {
 
 	@Embedded 
 	@Valid
+	@OneToOne
 	private Name name;
 
 	@Embedded 
 	@Valid
+	@OneToOne
 	private Address address;
 	
 	@Valid
