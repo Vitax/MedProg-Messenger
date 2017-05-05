@@ -57,7 +57,7 @@ public class Person extends BaseEntity {
 	@JoinColumn(name="identity")
 	private Document avatar;
 	
-	@OneToMany(mappedBy = "identity")
+	@OneToMany(mappedBy = "author")
 	private Set<Message> messages;
 	
 	@ManyToMany(mappedBy = "peopleObserved_REL") //cascade = CascadeType.REMOVE
