@@ -16,13 +16,11 @@ import javax.validation.constraints.Size;
 public class Message extends BaseEntity {
 
 	@ManyToOne
-	@Column(name = "author")
-	//@JoinColumn(name="identity")
+	@JoinColumn(name="identity")
 	private Person author;
 	
 	@ManyToOne
-	@Column(name = "subject")
-	//@JoinColumn(name="identity")
+	@JoinColumn(name="identity")
 	private BaseEntity subject;
 	
 	@Column(name = "body")
