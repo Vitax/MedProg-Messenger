@@ -34,7 +34,7 @@ public class Person extends BaseEntity {
 	private Group group;
 	
 	@Column(name = "email")
-	@Pattern(regexp = "(.+)\\@(.+)", message = "{invalid.email}")
+	@Pattern(regexp = "/\\S+\\@\S+\\.\\S+/", message = "{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
 	private String email;
 	
