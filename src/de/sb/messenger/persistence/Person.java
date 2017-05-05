@@ -87,7 +87,6 @@ public class Person extends BaseEntity {
 		ADMIN, USER
 	}
 
-	
 	public String getEmail() {
 		return email;
 	}
