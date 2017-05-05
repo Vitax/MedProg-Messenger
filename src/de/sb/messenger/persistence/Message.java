@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 @PrimaryKeyJoinColumn(name="identity")
 public class Message extends BaseEntity {
 
+	@ManyToOne
 	@Column(name = "author")
 	private Person author;
 	
