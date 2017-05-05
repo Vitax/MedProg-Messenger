@@ -31,7 +31,7 @@ public class BaseEntity implements Comparable<BaseEntity> {
 	@Column(name = "creationTimestamp")
 	private long creationTimestamp;
 	
-	@OneToMany(mappedBy = "BaseEntity" , cascade = CascadeType.REMOVE)
+	@OneToMany
 	private Set <Message> messagesCaused;
 
 	public BaseEntity() {
