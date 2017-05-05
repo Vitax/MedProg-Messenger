@@ -44,12 +44,12 @@ public class Person extends BaseEntity {
 
 	@Embedded 
 	@Valid
-	@OneToOne
+	//@OneToOne
 	private Name name;
 
 	@Embedded 
 	@Valid
-	@OneToOne
+	//@OneToOne
 	private Address address;
 	
 	@Valid
