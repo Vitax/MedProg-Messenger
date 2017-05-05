@@ -34,7 +34,7 @@ public class Document extends BaseEntity {
 	@NotNull @Size(min = 1, max = 16777215)
 	private byte[] content;
 	
-	@OneToMany(mappedBy = "identity")
+	@OneToMany(mappedBy = "avatar")
 	private Person avatar;
 
 	public Document(String contentType, byte[] content) throws NoSuchAlgorithmException, SQLException {
