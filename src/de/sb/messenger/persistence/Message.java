@@ -20,8 +20,7 @@ public class Message extends BaseEntity {
 	private Person author;
 	
 	@ManyToOne
-	@JoinColumn(name="identity")
-	//@Column(name = "subject")
+	@Column(name = "subject")
 	private BaseEntity subject;
 	
 	@Column(name = "body")
