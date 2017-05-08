@@ -8,6 +8,8 @@ import javax.validation.constraints.Size;
 @Embeddable 
 public class Address {
 
+	
+	
 	@Size(min = 0, max = 63) @Pattern(regexp = "^([^0-9]{2,} [0-9]+)?$")
 	private String street;
 	
@@ -17,6 +19,7 @@ public class Address {
 	@NotNull @Size(min = 1, max = 63) @Pattern(regexp = "^([^0-9]{2,})?$")
 	private String city;
 
+	
 	public Address() {
 		this.street = null;
 		this.postcode = null;
