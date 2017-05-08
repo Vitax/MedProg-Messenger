@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -34,7 +35,7 @@ public class Person extends BaseEntity {
 	private Group group;
 	
 	@Column(name = "email")
-	@Pattern(regexp = "/\\S+\\@\S+\\.\\S+/", message = "{invalid.email}")
+	@Pattern(regexp = "(.+)@(.+)", message = "{invalid.email}")
 	@NotNull @Size(min = 1, max = 128)
 	private String email;
 	
@@ -58,16 +59,16 @@ public class Person extends BaseEntity {
 	private Document avatar;
 	
 	@OneToMany(mappedBy = "author")
-	private Set<Message> messages;
+	private Set<Message> messagesAuthored;
 	
 	@ManyToMany(mappedBy = "peopleObserved") //cascade = CascadeType.REMOVE
 	private Set<Person> peopleObserving;
 	
 	@ManyToMany
 	@JoinTable(
-		name = “peopleRelations“,
-		joinColumns = @JoinColumn(name=“peopleObserved_ID“, referencedColumnName="identity"),
-		inverseJoinColumns = @JoinColumn(name=“peopleObserving_ID“, referencedColumnName="identity")
+		name = "peopleRelations",
+		joinColumns = @JoinColumn(name="peopleObserving_ID", referencedColumnName="identity"),
+		inverseJoinColumns = @JoinColumn(name="peopleObserved_ID", referencedColumnName="identity")
 	)
 	private Set<Person> peopleObserved;
 
@@ -131,12 +132,12 @@ public class Person extends BaseEntity {
 		this.avatar = avatar;
 	}
 
-	public Set<Message> getMessagesList() {
-		return messages;
+	public Set<Message> getMessagesAuthored() {
+		return messagesAuthored;
 	}
 
-	public void setMessagesList(Set<Message> messagesList) {
-		this.messages = messagesList;
+	public void setMessagesAuthored(Set<Message> messagesAuthored) {
+		this.messagesAuthored = messagesAuthored;
 	}
 
 	public Set<Person> getPeopleObserving() {

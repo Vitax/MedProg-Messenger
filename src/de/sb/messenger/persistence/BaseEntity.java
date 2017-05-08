@@ -1,6 +1,8 @@
 package de.sb.messenger.persistence;
 
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -8,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
@@ -32,7 +36,7 @@ public class BaseEntity implements Comparable<BaseEntity> {
 	private long creationTimestamp;
 	
 	@OneToMany(mappedBy = "subject")
-	private Set <Message> messagesCaused;
+	private Set<Message> messagesCaused;
 
 	public BaseEntity() {
 		this.identiy = 0;

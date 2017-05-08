@@ -3,6 +3,7 @@ package de.sb.messenger.persistence;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,7 +36,7 @@ public class Document extends BaseEntity {
 	private byte[] content;
 	
 	@OneToMany(mappedBy = "avatar")
-	private Person avatar;
+	private Set<Person> peopleAvatar;
 
 	public Document(String contentType, byte[] content) throws NoSuchAlgorithmException, SQLException {
 		this.contentHash = mediaHash(content);
