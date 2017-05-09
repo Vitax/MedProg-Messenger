@@ -30,8 +30,8 @@ public class Document extends BaseEntity {
 	
 	@Column(name = "contentType")
 	@NotNull 
-	@Size(min=3, max=63) 
-	@Pattern(regexp = "([a-f])/([a-f.+-])")
+	@Size(min=1, max=63) 
+	@Pattern(regexp = "([a-z]+)/([a-z.+-]+)")
 	private String contentType;
 	
 	@Column(name = "content")
