@@ -55,7 +55,7 @@ public class Person extends BaseEntity {
 	
 	@Valid
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="identity")
+	@PrimaryKeyJoinColumn(name="identity")
 	private Document avatar;
 	
 	@OneToMany(mappedBy = "author")
@@ -67,8 +67,8 @@ public class Person extends BaseEntity {
 	@ManyToMany
 	@JoinTable(
 		name = "peopleRelations",
-		joinColumns = @JoinColumn(name="peopleObserving_ID", referencedColumnName="identity"),
-		inverseJoinColumns = @JoinColumn(name="peopleObserved_ID", referencedColumnName="identity")
+		joinColumns = @JoinColumn(name="peopleObserving_ID", referencedColumnName="identity", insertable = false, updatable = false),
+		inverseJoinColumns = @JoinColumn(name="peopleObserved_ID", referencedColumnName="identity", insertable = false, updatable = false)
 	)
 	private Set<Person> peopleObserved;
 

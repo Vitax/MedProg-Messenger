@@ -24,15 +24,19 @@ import javax.validation.constraints.Size;
 public class Document extends BaseEntity {
 	
 	@Column(name = "contentHash")
-	@NotNull @Size(min = 32, max = 32)
+	@NotNull 
+	@Size(min = 32, max = 32)
 	private byte[] contentHash;
 	
 	@Column(name = "contentType")
-	@NotNull @Size(min = 1, max = 63) @Pattern(regexp = "^[a-z]+\\/[a-z\\.+\\-]+$")
+	@NotNull 
+	@Size(min=3, max=63) 
+	@Pattern(regexp = "([a-f])/([a-f.+-])")
 	private String contentType;
 	
 	@Column(name = "content")
-	@NotNull @Size(min = 1, max = 16777215)
+	@NotNull 
+	@Size(min = 1, max = 16777215)
 	private byte[] content;
 	
 	@OneToMany(mappedBy = "avatar")
