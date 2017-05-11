@@ -96,7 +96,6 @@ public class PersonEntityTest extends EntityTest {
 	public void tearDownAfter() throws Exception {
 		entityManager.clear();
 		entityManager.close();
-		EM_FACTORY.close();
 
 	}
 
