@@ -3,6 +3,9 @@ package de.sb.messenger.persistence;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -10,17 +13,16 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "Message")
+@Table(schema="messenger", name = "Message")
 @DiscriminatorValue(value = "Message")
-@PrimaryKeyJoinColumn(name="identity")
+@PrimaryKeyJoinColumn(name="messageIdentity")
 public class Message extends BaseEntity {
-
 	@ManyToOne
-	@PrimaryKeyJoinColumn(name="identity")
+	@JoinColumn(name="authorReference")
 	private Person author;
 	
 	@ManyToOne
-	@PrimaryKeyJoinColumn(name="identity")
+	@JoinColumn(name="subjectReference")
 	private BaseEntity subject;
 	
 	@Column(name = "body")
@@ -34,9 +36,7 @@ public class Message extends BaseEntity {
 	}
 
 	protected Message() {
-		this.author = null;
-		this.subject = null;
-		this.body = null;
+		this(null, null, null);
 	}
 	
 	public Person getAuthor() {

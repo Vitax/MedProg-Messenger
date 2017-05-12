@@ -1,6 +1,7 @@
 package de.sb.messenger.persistence;
 
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -8,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -17,31 +19,31 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
 @Entity
-@Table(name = "BaseEntity")
+@Table(schema="messenger", name = "BaseEntity")
 @Inheritance(strategy=InheritanceType.JOINED)
-@DiscriminatorColumn(name = "BaseEntity_Type", discriminatorType=DiscriminatorType.STRING, length=20)
+@DiscriminatorColumn(name = "discriminator", discriminatorType=DiscriminatorType.STRING, length=20)
 public class BaseEntity implements Comparable<BaseEntity> {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "identity")
-	@Min(value = 0)
 	private long identiy;
 	
 	@Column(name = "version")
-	@Min(value = 1)
+	@Min(1)
 	private int version;
 	
 	@Column(name = "creationTimestamp")
 	private long creationTimestamp;
 	
-	@OneToMany(mappedBy = "subject")
+	@OneToMany(mappedBy = "subject", cascade=CascadeType.REMOVE)
 	private Set<Message> messagesCaused;
 
 	public BaseEntity() {
 		this.identiy = 0;
 		this.version = 1;
 		this.creationTimestamp = System.currentTimeMillis();
+		messagesCaused = Collections.emptySet();
 	}
 
 	public long getIdentiy() {

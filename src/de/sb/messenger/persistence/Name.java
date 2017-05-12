@@ -1,5 +1,6 @@
 package de.sb.messenger.persistence;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -9,11 +10,14 @@ import javax.validation.constraints.Size;
 public class Name {
 	
 	
-	
-	@NotNull @Size(min = 1, max = 31)
+	@Column(name="givenName")
+	@NotNull 
+	@Size(min = 1, max = 31)
 	private String given;
 	
-	@NotNull @Size(min = 1, max = 31)
+	@Column(name="familyName")
+	@NotNull 
+	@Size(min = 1, max = 31)
 	private String family;
 
 	public Name() {

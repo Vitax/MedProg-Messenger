@@ -2,6 +2,9 @@ package de.sb.messenger.persistence;
 
 import static org.junit.Assert.*;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -28,9 +31,9 @@ public class PersonEntityTest extends EntityTest {
 		validator = this.getEntityValidatorFactory().getValidator();
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "static-access" })
 	@Test
-	public void testConstrains() {
+	public void testConstrains() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		// valid entity
 		Person person = new Person(Group.USER, "test@gmail.com");
 		person.getName().setGiven("John");
@@ -39,6 +42,8 @@ public class PersonEntityTest extends EntityTest {
 		person.getAddress().setPostcode("12345");
 		person.getAddress().setCity("Berlin");
 		person.setGroup(Group.USER);
+		byte[] hash = person.passwordHash("password");
+		person.setPasswordHash(hash);
 
 		// non-valid entity
 		Person personNV = new Person(Group.USER, "testgmail.com"); // @missing
@@ -51,19 +56,19 @@ public class PersonEntityTest extends EntityTest {
 																		// char
 		personNV.getAddress().setCity(""); // empty
 		personNV.setGroup(Group.USER);
-
+		
 		constrainViolations = validator.validate(person);
-		assertEquals(constrainViolations.size(), 0);
+		assertEquals(0, constrainViolations.size());
 		// clean up the set
 		constrainViolations.clear();
-
 		constrainViolations = validator.validate(personNV);
-		assertEquals(constrainViolations.size(), 5);
+		assertEquals(6, constrainViolations.size());
 
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
-	public void testLifeCycle() {
+	public void testLifeCycle() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		// create entity
 		Person person = new Person(Group.USER, "test@gmail.com");
 		person.getName().setGiven("John");
@@ -72,10 +77,13 @@ public class PersonEntityTest extends EntityTest {
 		person.getAddress().setPostcode("12345");
 		person.getAddress().setCity("Berlin");
 		person.setGroup(Group.USER);
+		byte[] hash = person.passwordHash("password");
+		person.setPasswordHash(hash);
 
 		// // add to the DB
 		entityManager.getTransaction().begin();
 		entityManager.persist(person);
+		
 		entityManager.getTransaction().commit();
 		this.getWasteBasket().add(person.getIdentiy());
 		entityManager.getTransaction().begin();
@@ -96,7 +104,6 @@ public class PersonEntityTest extends EntityTest {
 	public void tearDownAfter() throws Exception {
 		entityManager.clear();
 		entityManager.close();
-
 	}
 
 }

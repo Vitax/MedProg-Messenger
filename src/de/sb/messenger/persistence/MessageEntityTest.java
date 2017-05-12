@@ -4,6 +4,8 @@ package de.sb.messenger.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -30,8 +32,9 @@ public class MessageEntityTest extends EntityTest {
 		validator = this.getEntityValidatorFactory().getValidator();
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
-	public void testConstrains() {
+	public void testConstrains() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		// valid entity
 		Person person = new Person(Group.USER, "test@gmail.com");
 		person.getName().setGiven("John");
@@ -40,6 +43,8 @@ public class MessageEntityTest extends EntityTest {
 		person.getAddress().setPostcode("12345");
 		person.getAddress().setCity("Berlin");
 		person.setGroup(Group.USER);
+		byte[] hash = person.passwordHash("password");
+		person.setPasswordHash(hash);
 
 		// BaseEntity
 		BaseEntity baseEntity = new BaseEntity();
@@ -57,16 +62,20 @@ public class MessageEntityTest extends EntityTest {
 
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
-	public void testLifeCycle() {
+	public void testLifeCycle() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		// create entity
-		Person person = new Person(Group.USER, "test@gmail.com");
+		Person person = new Person("test@gmail.com", );
 		person.getName().setGiven("John");
 		person.getName().setFamily("Smith");
 		person.getAddress().setStreet("Falkenbergerstr. 1");
 		person.getAddress().setPostcode("12345");
 		person.getAddress().setCity("Berlin");
 		person.setGroup(Group.USER);
+		byte[] hash = person.passwordHash("password");
+		person.setPasswordHash(hash);
+
 
 		BaseEntity baseEntity = new BaseEntity();
 		Message message = new Message(person, baseEntity, "Hi there!");

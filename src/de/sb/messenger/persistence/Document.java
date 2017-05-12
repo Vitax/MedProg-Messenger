@@ -9,6 +9,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -18,10 +21,11 @@ import javax.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "Document")
+@Table(schema="messenger", name = "Document")
 @DiscriminatorValue(value = "Document")
-@PrimaryKeyJoinColumn(name="identity")
+@PrimaryKeyJoinColumn(name="documentIdentity")
 public class Document extends BaseEntity {
+	static private final byte[] EMPTY_HASH = mediaHash(new byte[0]);
 	
 	@Column(name = "contentHash")
 	@NotNull 
@@ -38,20 +42,15 @@ public class Document extends BaseEntity {
 	@NotNull 
 	@Size(min = 1, max = 16777215)
 	private byte[] content;
-	
-	@OneToMany(mappedBy = "avatar")
-	private Set<Person> peopleAvatar;
 
-	public Document(String contentType, byte[] content) throws NoSuchAlgorithmException, SQLException {
-		this.contentHash = mediaHash(content);
+	public Document(String contentType, byte[] content) {
+		this.contentHash = content == null ? EMPTY_HASH : mediaHash(content);
 		this.contentType = contentType;
 		this.content = content;
 	}
 
 	protected Document() {
-		this.contentHash = null;
-		this.contentType = null;
-		this.content = null;
+		this(null,null);
 	}
 	
 	public byte[] getContentHash() {
@@ -74,7 +73,11 @@ public class Document extends BaseEntity {
 		this.content = content;
 	}
 
-	static public byte[] mediaHash(byte[] content) throws NoSuchAlgorithmException, SQLException {
-		return MessageDigest.getInstance("SHA-256").digest(content);
+	static public byte[] mediaHash(byte[] content) {
+		try{
+			return MessageDigest.getInstance("SHA-256").digest(content);
+		} catch (NoSuchAlgorithmException e) {
+			throw new AssertionError(e);
+		}
 	}
 }
