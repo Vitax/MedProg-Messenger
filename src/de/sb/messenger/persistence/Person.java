@@ -13,10 +13,6 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -66,13 +62,13 @@ public class Person extends BaseEntity {
 	@OneToMany(mappedBy = "author", cascade=CascadeType.REMOVE)
 	private Set<Message> messagesAuthored;
 	
-	@ManyToMany(mappedBy = "peopleObserved") //cascade = CascadeType.REMOVE
+	@ManyToMany(mappedBy = "peopleObserved", cascade=CascadeType.REMOVE)
 	private Set<Person> peopleObserving;
 	
 	@ManyToMany
 	@JoinTable(
 		schema="messenger",
-		name = "ObservationAssociation",
+		name = "observationassociation",
 		joinColumns = @JoinColumn(name="observingReference", updatable = true),
 		inverseJoinColumns = @JoinColumn(name="observedReference" , updatable = false)
 	)

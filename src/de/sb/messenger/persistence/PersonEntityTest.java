@@ -35,7 +35,7 @@ public class PersonEntityTest extends EntityTest {
 	@Test
 	public void testConstrains() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		// valid entity
-		Person person = new Person(Group.USER, "test@gmail.com");
+		Person person = new Person("test@gmail.com", new Document("image/png", null));
 		person.getName().setGiven("John");
 		person.getName().setFamily("Smith");
 		person.getAddress().setStreet("Falkenbergerstr. 1");
@@ -46,7 +46,7 @@ public class PersonEntityTest extends EntityTest {
 		person.setPasswordHash(hash);
 
 		// non-valid entity
-		Person personNV = new Person(Group.USER, "testgmail.com"); // @missing
+		Person personNV = new Person("testgmail.com", new Document("image/png", null)); // @missing
 		personNV.getName().setGiven(""); // empty
 		personNV.getName().setFamily(""); // empty
 		personNV.getAddress().setStreet("Falkenbergerstr. 1");
@@ -70,7 +70,7 @@ public class PersonEntityTest extends EntityTest {
 	@Test
 	public void testLifeCycle() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		// create entity
-		Person person = new Person(Group.USER, "test@gmail.com");
+		Person person = new Person("test@gmail.com", new Document("image/png", null));
 		person.getName().setGiven("John");
 		person.getName().setFamily("Smith");
 		person.getAddress().setStreet("Falkenbergerstr. 1");

@@ -18,6 +18,7 @@ public class Address {
 	@Size(min = 0, max = 15) @Pattern(regexp = "^[0-9]*$")
 	private String postcode;
 	
+	@Column(name="city")
 	@NotNull @Size(min = 1, max = 63) @Pattern(regexp = "^([^0-9]{2,})?$")
 	private String city;
 

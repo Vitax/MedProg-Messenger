@@ -1,9 +1,6 @@
 package de.sb.messenger.persistence;
-
-
 import java.util.Collections;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -65,10 +62,6 @@ public class BaseEntity implements Comparable<BaseEntity> {
 
 	public Set <Message> getMessagesCaused() {
 		return messagesCaused;
-	}
-
-	public void setMessagesCaused(Set<Message> messagesCaused) {
-		this.messagesCaused = messagesCaused;
 	}
 
 	@Override
