@@ -11,7 +11,7 @@ public class Address {
 
 	
 	@Column(name="street")
-	@Size(min = 0, max = 63) @Pattern(regexp = "^([^0-9]{2,} [0-9]+)?$")
+	@Size(min = 0, max = 63) @Pattern(regexp = "([A-Za-z0-9/. -]{2,} [0-9a-z]+)")
 	private String street;
 	
 	@Column(name="postcode")
@@ -19,7 +19,7 @@ public class Address {
 	private String postcode;
 	
 	@Column(name="city")
-	@NotNull @Size(min = 1, max = 63) @Pattern(regexp = "^([^0-9]{2,})?$")
+	@NotNull @Size(min = 1, max = 63) @Pattern(regexp = "([A-Za-z/ -]{2,})")
 	private String city;
 
 	
