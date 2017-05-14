@@ -15,8 +15,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.sb.messenger.persistence.Person.Group;
-
 public class DocumentEntityTest extends EntityTest {
 
 	public EntityManager entityManager;
@@ -36,18 +34,19 @@ public class DocumentEntityTest extends EntityTest {
 		// valid entity
 		String s = "some content";
 		byte[] content = s.getBytes();
-		Document doc = new Document("someType", content);
-
-		// non valid document - an empty content type
-		Document docNV = new Document("", content);
+		Document doc = new Document("image/jpeg", content);
 
 		constrainViolations = validator.validate(doc);
-		assertEquals(constrainViolations.size(), 0);
+
+		assertEquals(0, constrainViolations.size());
 		// clean up the set
 		constrainViolations.clear();
-
+		
+		// non valid document - an empty content type, size<1, regex not matching
+		Document docNV = new Document("", content);
 		constrainViolations = validator.validate(docNV);
-		assertEquals(constrainViolations.size(), 1);
+
+		assertEquals(2, constrainViolations.size());
 
 	}
 
@@ -57,7 +56,7 @@ public class DocumentEntityTest extends EntityTest {
 		String s = "some content";
 		byte[] content = s.getBytes();
 		Document doc = new Document("someType", content);
-		
+
 		// // add to the DB
 		entityManager.getTransaction().begin();
 		entityManager.persist(doc);
@@ -83,8 +82,8 @@ public class DocumentEntityTest extends EntityTest {
 	public void tearDownAfter() throws Exception {
 		entityManager.clear();
 		entityManager.close();
-		EM_FACTORY.close();
 
 	}
+
 
 }
