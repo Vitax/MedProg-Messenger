@@ -55,17 +55,18 @@ public class DocumentEntityTest extends EntityTest {
 		// create entity
 		String s = "some content";
 		byte[] content = s.getBytes();
-		Document doc = new Document("someType", content);
+		Document doc = new Document("image/jpeg", content);
 
 		// // add to the DB
 		entityManager.getTransaction().begin();
+		
 		entityManager.persist(doc);
 		entityManager.getTransaction().commit();
 		this.getWasteBasket().add(doc.getIdentiy());
 		entityManager.getTransaction().begin();
 
 		doc = entityManager.find(Document.class, doc.getIdentiy());
-		assertEquals(doc.getContentType(), "someType");
+		assertEquals("image/jpeg",doc.getContentType());
 		String cont = new String(doc.getContent());
 		assertEquals(cont, "some content");
 
@@ -73,8 +74,7 @@ public class DocumentEntityTest extends EntityTest {
 		entityManager.remove(doc);
 		entityManager.getTransaction().commit();
 		// check if it's deleted , find for getter , Reference for setter
-		entityManager.find(Document.class, doc.getIdentiy());
-		assertNull(doc);
+		assertNull(entityManager.find(Document.class, doc.getIdentiy()));
 
 	}
 

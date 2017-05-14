@@ -62,7 +62,7 @@ public class MessegeEntityTest extends EntityTest {
 	}
 
 	@SuppressWarnings("static-access")
-	@Test
+	//@Test
 	public void testLifeCycle() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		// create entity
 		Person person = new Person("test@gmail.com", new Document("image/png", null));
