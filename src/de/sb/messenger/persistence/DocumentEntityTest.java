@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
@@ -41,8 +42,9 @@ public class DocumentEntityTest extends EntityTest {
 		assertEquals(0, constrainViolations.size());
 		// clean up the set
 		constrainViolations.clear();
-		
-		// non valid document - an empty content type, size<1, regex not matching
+
+		// non valid document - an empty content type, size<1, regex not
+		// matching
 		Document docNV = new Document("", content);
 		constrainViolations = validator.validate(docNV);
 
@@ -58,21 +60,22 @@ public class DocumentEntityTest extends EntityTest {
 		Document doc = new Document("image/jpeg", content);
 
 		// // add to the DB
-		entityManager.getTransaction().begin();
-		
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
 		entityManager.persist(doc);
-		entityManager.getTransaction().commit();
+		transaction.commit();
 		this.getWasteBasket().add(doc.getIdentiy());
-		entityManager.getTransaction().begin();
-
+		
+		transaction.begin();
 		doc = entityManager.find(Document.class, doc.getIdentiy());
-		assertEquals("image/jpeg",doc.getContentType());
+		assertEquals("image/jpeg", doc.getContentType());
 		String cont = new String(doc.getContent());
 		assertEquals(cont, "some content");
 
 		// remove person from DB
 		entityManager.remove(doc);
 		entityManager.getTransaction().commit();
+		
 		// check if it's deleted , find for getter , Reference for setter
 		assertNull(entityManager.find(Document.class, doc.getIdentiy()));
 
@@ -82,8 +85,6 @@ public class DocumentEntityTest extends EntityTest {
 	public void tearDownAfter() throws Exception {
 		entityManager.clear();
 		entityManager.close();
-
 	}
-
 
 }

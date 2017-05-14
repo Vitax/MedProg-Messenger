@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
@@ -34,6 +35,7 @@ public class PersonEntityTest extends EntityTest {
 	@SuppressWarnings({ "deprecation", "static-access" })
 	@Test
 	public void testConstrains() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
 		// valid entity
 		Person person = new Person("test@gmail.com", new Document());
 		person.getName().setGiven("John");
@@ -46,7 +48,7 @@ public class PersonEntityTest extends EntityTest {
 		person.setPasswordHash(hash);
 
 		// non-valid entity
-		Person personNV = new Person( "testgmail.com",new Document()); // @missing
+		Person personNV = new Person("testgmail.com", new Document()); // @missing
 		personNV.getName().setGiven(""); // empty
 		personNV.getName().setFamily(""); // empty
 		personNV.getAddress().setStreet("Falkenbergerstr. 1");
@@ -54,24 +56,28 @@ public class PersonEntityTest extends EntityTest {
 																		// then
 																		// 15
 																		// char
-		personNV.getAddress().setCity(""); // empty two errors city size and regex match 
+		personNV.getAddress().setCity(""); // empty two errors city size and
+											// regex match
 		personNV.setGroup(Group.USER);
-		
+
 		constrainViolations = validator.validate(person);
 		assertEquals(0, constrainViolations.size());
 		// clean up the set
 		constrainViolations.clear();
 		constrainViolations = validator.validate(personNV);
-		
+
 		assertEquals(7, constrainViolations.size());
 
 	}
 
 	@SuppressWarnings("static-access")
-	//@Test
+	@Test
 	public void testLifeCycle() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		String s = "some content";
+		byte[] content = s.getBytes();
+		Document doc = new Document("image/jpeg", content);
 		// create entity
-		Person person = new Person( "test@gmail.com",new Document());
+		Person person = new Person("test@gmail.com", doc);
 		person.getName().setGiven("John");
 		person.getName().setFamily("Smith");
 		person.getAddress().setStreet("Falkenbergerstr. 1");
@@ -82,22 +88,33 @@ public class PersonEntityTest extends EntityTest {
 		person.setPasswordHash(hash);
 
 		// // add to the DB
-		entityManager.getTransaction().begin();
+
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		//entityManager.remove(entityManager.find(Person.class, (long)33));
+		entityManager.persist(doc);
+		transaction.commit();
+		transaction.begin();
 		entityManager.persist(person);
-		
-		entityManager.getTransaction().commit();
+		transaction.commit();
+		this.getWasteBasket().add(doc.getIdentiy());
 		this.getWasteBasket().add(person.getIdentiy());
-		entityManager.getTransaction().begin();
-		person = entityManager.find(Person.class, person.getIdentiy());
-		assertEquals(person.getName().getGiven(), "John");
-		assertEquals(person.getName().getFamily(), "Smith");
-		assertEquals(person.getAddress().getCity(), "Berlin");
-		// remove person from DB
-		entityManager.remove(person);
-		entityManager.getTransaction().commit();
-		// check if it's deleted , find for getter , Reference for setter
-		entityManager.find(Person.class, person.getIdentiy());
-		assertNull(person);
+		//// entityManager.remove(entityManager.find(Document.class, (long)22));
+		
+		 transaction.begin();
+		 person = entityManager.find(Person.class, person.getIdentiy());
+		 assertEquals(person.getName().getGiven(), "John");
+		 assertEquals(person.getName().getFamily(), "Smith");
+		 assertEquals(person.getAddress().getCity(), "Berlin");
+		 // remove person from DB
+		 entityManager.remove(person);
+		 transaction.commit();
+		 transaction.begin();
+		 entityManager.remove(doc);		
+		 transaction.commit();
+		 // check if it's deleted , find for getter , Reference for setter
+		 assertNull(entityManager.find(Document.class, doc.getIdentiy()));
+		 assertNull(entityManager.find(Person.class, person.getIdentiy()));
 
 	}
 
