@@ -99,7 +99,7 @@ public class PersonEntityTest extends EntityTest {
 		transaction.commit();
 		this.getWasteBasket().add(doc.getIdentiy());
 		this.getWasteBasket().add(person.getIdentiy());
-		//// entityManager.remove(entityManager.find(Document.class, (long)22));
+		
 		
 		 transaction.begin();
 		 person = entityManager.find(Person.class, person.getIdentiy());
