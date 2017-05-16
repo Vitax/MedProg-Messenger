@@ -31,7 +31,7 @@ public class DocumentEntityTest extends EntityTest {
 	}
 
 	@Test
-	public void testConstrains() throws NoSuchAlgorithmException, SQLException {
+	public void testConstrains(){
 		// valid entity
 		String s = "some content";
 		byte[] content = s.getBytes();
@@ -54,12 +54,12 @@ public class DocumentEntityTest extends EntityTest {
 
 	@Test
 	public void testLifeCycle() throws NoSuchAlgorithmException, SQLException {
-		// create entity
+		// create document entity
 		String s = "some content";
 		byte[] content = s.getBytes();
 		Document doc = new Document("image/jpeg", content);
 
-		// // add to the DB
+		// add to the DB
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		entityManager.persist(doc);
@@ -72,11 +72,11 @@ public class DocumentEntityTest extends EntityTest {
 		String cont = new String(doc.getContent());
 		assertEquals(cont, "some content");
 
-		// remove person from DB
+		// remove document from DB
 		entityManager.remove(doc);
 		entityManager.getTransaction().commit();
 		
-		// check if it's deleted , find for getter , Reference for setter
+		// check if document is deleted , find for getter , Reference for setter
 		assertNull(entityManager.find(Document.class, doc.getIdentiy()));
 
 	}

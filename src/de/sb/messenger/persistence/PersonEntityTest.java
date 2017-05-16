@@ -32,9 +32,10 @@ public class PersonEntityTest extends EntityTest {
 		validator = this.getEntityValidatorFactory().getValidator();
 	}
 
-	@SuppressWarnings({ "deprecation", "static-access" })
+
+	@SuppressWarnings("static-access")
 	@Test
-	public void testConstrains() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public void testConstrains(){
 
 		// valid entity
 		Person person = new Person("test@gmail.com", new Document());
@@ -44,8 +45,14 @@ public class PersonEntityTest extends EntityTest {
 		person.getAddress().setPostcode("12345");
 		person.getAddress().setCity("Berlin");
 		person.setGroup(Group.USER);
-		byte[] hash = person.passwordHash("password");
-		person.setPasswordHash(hash);
+		byte[] hash;
+		try {			
+			hash = person.passwordHash("password");
+			person.setPasswordHash(hash);
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			throw new AssertionError(e);
+		}
+		
 
 		// non-valid entity
 		Person personNV = new Person("testgmail.com", new Document()); // @missing
@@ -91,7 +98,6 @@ public class PersonEntityTest extends EntityTest {
 
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
-		//entityManager.remove(entityManager.find(Person.class, (long)33));
 		entityManager.persist(doc);
 		transaction.commit();
 		transaction.begin();
@@ -106,13 +112,15 @@ public class PersonEntityTest extends EntityTest {
 		 assertEquals(person.getName().getGiven(), "John");
 		 assertEquals(person.getName().getFamily(), "Smith");
 		 assertEquals(person.getAddress().getCity(), "Berlin");
+		 
 		 // remove person from DB
 		 entityManager.remove(person);
 		 transaction.commit();
 		 transaction.begin();
 		 entityManager.remove(doc);		
 		 transaction.commit();
-		 // check if it's deleted , find for getter , Reference for setter
+		 
+		 // check if person is deleted , find for getter , Reference for setter
 		 assertNull(entityManager.find(Document.class, doc.getIdentiy()));
 		 assertNull(entityManager.find(Person.class, person.getIdentiy()));
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
@@ -62,13 +63,13 @@ public class MessageEntityTest extends EntityTest {
 
 	}
 
-	@SuppressWarnings("static-access")
 	@Test
-	public void testLifeCycle() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	
+	public void testLifeCycle()   {
 		Person person = entityManager.find(Person.class, 8L);
 		BaseEntity baseEntity = entityManager.find(BaseEntity.class,8L);
 		Message message = new Message(person,baseEntity , "Hi there!");
-		
+	
 		// add to the DB
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
@@ -87,7 +88,7 @@ public class MessageEntityTest extends EntityTest {
 		transaction.commit();
 		// check if it's deleted , find for getter , Reference for setter	
 		assertNull(entityManager.find(Message.class, message.getIdentiy()));
-
+		
 	}
 
 	@After
