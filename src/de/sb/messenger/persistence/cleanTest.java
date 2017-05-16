@@ -27,12 +27,12 @@ public class cleanTest extends EntityTest{
 	
 	@Test
 	public void testLifeCycle() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		entityManager.remove(entityManager.find(BaseEntity.class, (long)59));
-		transaction.commit();
+//		EntityTransaction transaction = entityManager.getTransaction();
 //		transaction.begin();
-//		entityManager.remove(entityManager.find(Document.class, (long)55));
-		transaction.commit();
+//		entityManager.remove(entityManager.find(Message.class, 81L));
+//		transaction.commit();
+//		transaction.begin();
+//		entityManager.remove(entityManager.find(Document.class, 62L));
+//		transaction.commit();
 	}
 }
