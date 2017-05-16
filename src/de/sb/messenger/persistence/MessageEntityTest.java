@@ -112,7 +112,7 @@ public class MessageEntityTest extends EntityTest {
 		
 		
 		// // add to the DB
-
+	EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		entityManager.persist(doc);
 		entityManager.getTransaction().commit();
