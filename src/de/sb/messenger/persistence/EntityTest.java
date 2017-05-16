@@ -1,6 +1,6 @@
 package de.sb.messenger.persistence;
 
-import static org.junit.Assert.fail;
+import static java.util.logging.Level.WARNING;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +15,6 @@ import javax.validation.ValidatorFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class EntityTest {
 
@@ -47,16 +46,20 @@ public class EntityTest {
 		return wasteBasket;
 	}
 	
+	//copyright = "2015-2015 Sascha Baumeister, all rights reserved"
 	@After
 	public void emptyWasteBasket () {
 		final EntityManager entityManager = EM_FACTORY.createEntityManager();
 		try{
 			entityManager.getTransaction().begin();
 			for (final Long identity : this.wasteBasket) {
-				
+				try{
 					final Object entity = entityManager.find(BaseEntity.class, identity);
 					if (entity != null) entityManager.remove(entity);
+			} catch (final Exception exception) {
+				Logger.getGlobal().log(WARNING, exception.getMessage(), exception);
 			}
+		}
 			entityManager.getTransaction().commit();
 			this.wasteBasket.clear();
 		} finally {
