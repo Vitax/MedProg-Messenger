@@ -91,7 +91,7 @@ public class MessageEntityTest extends EntityTest {
 		//poly_subject.setPasswordHash(hash2);
 		
 		//case 2
-		Document poly_subject = new Document("image/jpeg", content);
+		Document poly_subject = new Document("image/jpeg", content);   
 			
 
 		
