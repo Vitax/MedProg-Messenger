@@ -75,32 +75,53 @@ public class MessageEntityTest extends EntityTest {
 		person.getAddress().setStreet("Falkenbergerstr. 1");
 		person.getAddress().setPostcode("12345");
 		person.getAddress().setCity("Berlin");
-		person.setGroup(Group.USER);
+		
 		byte[] hash = person.passwordHash("password");
 		person.setPasswordHash(hash);
+		
+		
+		//case 1
+		//Person poly_subject = new Person("subject@gmail.com", doc);
+		//poly_subject.getName().setGiven("Poly");
+		//poly_subject.getName().setFamily("Subject");
+		//poly_subject.getAddress().setStreet("Falkenbergerstr. 1");
+		//poly_subject.getAddress().setPostcode("12345");
+		//poly_subject.getAddress().setCity("Berlin");
+		//byte[] hash2 = poly_subject.passwordHash("password");
+		//poly_subject.setPasswordHash(hash2);
+		
+		//case 2
+		Document poly_subject = new Document("image/jpeg", content);
+			
 
-
-		BaseEntity baseEntity = new BaseEntity();
-		Message message = new Message(person, new BaseEntity(), "Hi there!");
+		
+		//BaseEntity subject = new BaseEntity();
+		Message message = new Message(person, doc, "Hi there!");
+		
+		
+		//case 3
+		//Message poly_subject = new Message(person, message, "Hi there!");
+		
+		
 		
 		// // add to the DB
 		EntityTransaction transaction = entityManager.getTransaction();
-//		transaction.begin();
-//		entityManager.persist(doc);
-//		entityManager.getTransaction().commit();
-//		transaction.begin();
-//		entityManager.persist(person);
-//		entityManager.getTransaction().commit();
 		transaction.begin();
-		entityManager.persist(baseEntity);
+		entityManager.persist(doc);
 		entityManager.getTransaction().commit();
+		transaction.begin();
+		entityManager.persist(person);
+		entityManager.getTransaction().commit();
+		//transaction.begin();
+		//entityManager.persist(poly_subject);
+		//entityManager.getTransaction().commit();
 		transaction.begin();
 		entityManager.persist(message);
 		entityManager.getTransaction().commit();
 		
 		this.getWasteBasket().add(doc.getIdentiy());
 		this.getWasteBasket().add(person.getIdentiy());
-		this.getWasteBasket().add(baseEntity.getIdentiy());
+		//this.getWasteBasket().add(poly_subject.getIdentiy());
 		this.getWasteBasket().add(message.getIdentiy());
 		
 //		transaction.begin();
@@ -124,5 +145,6 @@ public class MessageEntityTest extends EntityTest {
 
 	}
 }
+
 
 
