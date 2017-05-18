@@ -23,17 +23,18 @@ public class BaseEntity implements Comparable<BaseEntity> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "identity")
+	@Column(name = "identity", nullable = false)
 	private long identiy;
 	
-	@Column(name = "version")
+	@Column(name = "version", nullable = false)
 	@Min(1)
 	private int version;
 	
-	@Column(name = "creationTimestamp")
+	@Column(name = "creationTimestamp", nullable = false)
 	private long creationTimestamp;
 	
 	@OneToMany(mappedBy = "subject", cascade=CascadeType.REMOVE)
+	@Column(updatable = false, insertable =false)
 	private Set<Message> messagesCaused;
 
 	public BaseEntity() {
