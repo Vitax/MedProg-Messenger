@@ -148,7 +148,11 @@ public class Person extends BaseEntity {
 	}
 
 	@Size(min = 32, max = 32)
-	static public byte[] passwordHash(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		return MessageDigest.getInstance("SHA-256").digest(password.getBytes("UTF-8"));
+	static public byte[] passwordHash(String password){
+		try{
+			return MessageDigest.getInstance("SHA-256").digest(password.getBytes("UTF-8"));
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			throw new AssertionError(e);
+			}
 	}
 }
