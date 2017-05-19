@@ -2,6 +2,8 @@ package de.sb.messenger.rest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.NotAuthorizedException;
 import de.sb.messenger.persistence.Person;
 import de.sb.toolbox.net.HttpCredentials;
@@ -27,14 +29,20 @@ public interface Authenticator {
 	 */
 	@SuppressWarnings("unused")
 	static public Person authenticate (final HttpCredentials.Basic credentials) throws NotAuthorizedException, PersistenceException, IllegalStateException, NullPointerException {
-		final String pql = "select p from Person as p where p.email = :email";
+		final String pql = "select p from Person as p where p.email = :email"; // and p.password = :password
 		final EntityManager messengerManager = RestJpaLifecycleProvider.entityManager("messenger");
 
-		// TODO: Add JPA authentication by calculating the password hash from the given password,
-		// creating a query using the constant above, and returning the person if it matches the
-		// password hash. If there is none, or if it fails the password hash check, then throw
-		// NotAuthorizedException("Basic"). Note that this exception type is a specialized Subclass
-		// of ClientErrorException that is capable of storing an authentication challenge.
-		throw new NotAuthorizedException("Basic");
+		String email = credentials.getUsername(); // username == email?
+		byte[] passwordHash = Person.passwordHash(credentials.getPassword());
+	
+		TypedQuery<Person> query = messengerManager.createQuery(pql, Person.class);
+		query.setParameter("email", email);
+		//sql passowrd check: pql+=" and p.password = :password"; query.setParameter("password", passwordHash);
+		Person person = query.getSingleResult();
+		
+		if(person != null && person.getPasswordHash() != passwordHash){	person = null; }
+		if(person == null) throw new NotAuthorizedException("Basic");
+		
+		return person;
 	}
 }

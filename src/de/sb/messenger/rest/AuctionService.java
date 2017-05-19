@@ -3,6 +3,7 @@ package de.sb.messenger.rest;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
+import javax.persistence.Cache;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.GET;
@@ -37,8 +38,18 @@ public class AuctionService {
 	@PUT
 	@Path("")
 	@Produces({ APPLICATION_JSON, APPLICATION_XML })
-	public void createMessage () {
-		// TODO
+	public long createMessage (@HeaderParam("Authorization") final String authentication, BaseEntity subject, String content) { //body, subjectReference
+		Person author = PersonService.getRequester(authentication);
+		
+		final EntityManager messengerManager = RestJpaLifecycleProvider.entityManager("messenger");
+       
+        messengerManager.getEntityManagerFactory().getCache().evict(Person.class, author.getIdentiy());
+        messengerManager.getEntityManagerFactory().getCache().evict(BaseEntity.class, subject.getIdentiy());
+        
+		Message message  = new Message(author,subject,content);
+        messengerManager.persist(message);
+        
+		return message.getIdentiy();
 	}
 	
 	@GET

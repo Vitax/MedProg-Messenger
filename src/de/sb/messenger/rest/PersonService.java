@@ -6,14 +6,21 @@ import static javax.ws.rs.core.MediaType.MEDIA_TYPE_WILDCARD;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -43,14 +50,21 @@ public class PersonService {
 	
 	@GET
 	@Produces({ APPLICATION_JSON, APPLICATION_XML })
-	public Person[] getPeople (final String criteria) {
+	public List<Person> getPeople (final String[] criteria) {
 		final EntityManager messengerManager = RestJpaLifecycleProvider.entityManager("messenger");
-		//messengerManager.getCriteriaBuilder().ge(arg0, arg1);
+		CriteriaQuery<Person> cq = messengerManager.getCriteriaBuilder().createQuery(Person.class);
+		Root<Person> p = cq.from(Person.class);
+		
+		Metamodel m = messengerManager.getMetamodel();
+		EntityType<Person> Person_ = m.entity(Person.class);
+		//cq.where(p.get(Person_.getName()).isNull());
 		// TODO
-		return null;
+		
+		List<Person> people = messengerManager.createQuery(cq).getResultList();
+
+		return people;
 	}
 	
-	// TODO
 	@PUT
 	public long createsPerson (final Person template, @HeaderParam("Set-Password") final String password) {
 		final EntityManager messengerManager = RestJpaLifecycleProvider.entityManager("messenger");
@@ -58,19 +72,24 @@ public class PersonService {
 		Person person = null;
 		final long identity = template.getIdentiy();
 		
-		if(identity == 0) {} //person = (Person) messengerManager.create
+		if(identity == 0) {
+			person = new Person(template.getEmail(), template.getAvatar());
+			messengerManager.getEntityManagerFactory().getCache().evict(Person.class, person.getIdentiy());
+		}
 		else {
 			person = getPerson(identity);
-			
-			// update
-			// TODO
+			person.setAvatar(template.getAvatar());
+			person.setEmail(template.getEmail());
+			//person.setGroup(template.getGroup());
 		}
 		
 		if (person == null) throw new ClientErrorException(NOT_FOUND);
 		
 		if(password.equals("") != true) {
-			// TODO
+			person.setPasswordHash(Person.passwordHash(password));
 		}
+		
+		messengerManager.persist(person); // update?
 		
 		return identity;
 	}
@@ -78,7 +97,7 @@ public class PersonService {
 	@GET
 	@Path("requester")
 	@Produces({ APPLICATION_JSON, APPLICATION_XML })
-	public Person getRequester (@HeaderParam("Authorization") final String authentication) {
+	public static Person getRequester (@HeaderParam("Authorization") final String authentication) {
 		return Authenticator.authenticate(RestCredentials.newBasicInstance(authentication));
 	}
 	
@@ -122,13 +141,16 @@ public class PersonService {
 	
 	@PUT
 	@Path("{identity}/peopleObserved")
-	public void updatePerson (@PathParam("identity") final long identity) {
+	public void updatePerson (@PathParam("identity") final long identity, Set<Long> peopleObservedIdentities) {
 		// TODO
+		//messengerManager.getEntityManagerFactory().getCache().evict(Person.class, author.getIdentiy());
 	}
 	
 	@PUT
 	@Path("{identity}/avatar")
-	public void updateAvatar (@PathParam("identity") final long identity) {
+	@Consumes(MEDIA_TYPE_WILDCARD)
+	public void updateAvatar (@HeaderParam("Authorization") final String authentication, @PathParam("identity") final long identity, String mediaType, byte[] content) {
+		Person owner = PersonService.getRequester(authentication);
 		// TODO
 	}
 }
